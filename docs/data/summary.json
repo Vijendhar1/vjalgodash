@@ -1,10 +1,10 @@
 {
-  "last_updated": "2026-06-27 11:21",
-  "real_alltime_pnl": 10701.060000000001,
+  "last_updated": "2026-06-27 11:24",
+  "real_alltime_pnl": 22784.469999999998,
   "today_net_pnl": 0,
-  "win_rate": 42.9,
-  "total_closed_trades": 21,
-  "wins": 9,
-  "losses": 12,
+  "win_rate": 83.3,
+  "total_closed_trades": 6,
+  "wins": 5,
+  "losses": 1,
   "open_positions": 0
 }
