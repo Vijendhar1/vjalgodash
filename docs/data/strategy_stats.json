@@ -1,0 +1,23 @@
+[
+  {
+    "strategy": "ORB",
+    "direction": "CE",
+    "trades": 15,
+    "wins": 7,
+    "total_pnl": 15937.0
+  },
+  {
+    "strategy": "RES_REJECTION",
+    "direction": "PE",
+    "trades": 5,
+    "wins": 2,
+    "total_pnl": -1353.0
+  },
+  {
+    "strategy": "GAP_MOMENTUM",
+    "direction": "CE",
+    "trades": 1,
+    "wins": 0,
+    "total_pnl": -3883.0
+  }
+]

@@ -1,0 +1,250 @@
+/* ============================================================
+   VJAlgo Dashboard — Dark Terminal Theme
+   ============================================================ */
+
+:root {
+  --bg:        #0a0d12;
+  --bg2:       #0f1318;
+  --bg3:       #151b24;
+  --border:    #1e2a38;
+  --accent:    #00e5ff;
+  --green:     #00c853;
+  --red:       #ff3d57;
+  --gold:      #ffd740;
+  --muted:     #4a6080;
+  --text:      #c8d8e8;
+  --text-dim:  #6b8299;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-ui:   'Inter', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── TOP BAR ───────────────────────────────────────────────── */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 20px;
+  height: 52px;
+  gap: 24px;
+}
+
+.topbar-left { display: flex; align-items: baseline; gap: 10px; }
+
+.logo {
+  font-family: var(--font-mono);
+  font-size: 20px; font-weight: 700;
+  color: var(--text); letter-spacing: -0.5px;
+}
+.logo .accent { color: var(--accent); }
+
+.tagline { font-size: 11px; color: var(--text-dim); letter-spacing: 0.08em; text-transform: uppercase; }
+
+.tabs { display: flex; gap: 2px; flex: 1; justify-content: center; }
+
+.tab {
+  background: none; border: none; color: var(--text-dim);
+  font-family: var(--font-ui); font-size: 12px; font-weight: 500;
+  padding: 6px 14px; border-radius: 6px; cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+.tab:hover { color: var(--text); background: var(--bg3); }
+.tab.active { color: var(--accent); background: rgba(0,229,255,0.08); }
+
+.topbar-right { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-dim); }
+
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+}
+
+/* ── PAGES ─────────────────────────────────────────────────── */
+.page { display: none; padding: 20px 24px 40px; }
+.page.active { display: block; }
+
+/* ── HERO STATS ─────────────────────────────────────────────── */
+.page-hero {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.hero-stat {
+  flex: 1; min-width: 140px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 22px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-stat::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+.hero-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+.hero-value { font-family: var(--font-mono); font-size: 22px; font-weight: 700; color: var(--text); }
+
+/* ── SECTION TITLES ─────────────────────────────────────────── */
+.section-title {
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--accent);
+  margin: 24px 0 12px;
+  padding-left: 2px;
+}
+.subtitle { color: var(--text-dim); font-weight: 400; text-transform: none; letter-spacing: 0; }
+
+/* ── DATA TABLE ─────────────────────────────────────────────── */
+.data-table {
+  width: 100%; border-collapse: collapse;
+  font-family: var(--font-mono); font-size: 12px;
+}
+
+.data-table thead tr {
+  background: var(--bg3);
+}
+.data-table th {
+  padding: 8px 12px; text-align: left;
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.data-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(30,42,56,0.6);
+  color: var(--text);
+  white-space: nowrap;
+}
+.data-table tbody tr:hover { background: rgba(0,229,255,0.03); }
+
+/* ── COLOURS ────────────────────────────────────────────────── */
+.pos { color: var(--green); }
+.neg { color: var(--red); }
+.neutral { color: var(--text-dim); }
+.gold { color: var(--gold); }
+.accent-text { color: var(--accent); }
+
+/* ── BADGES ─────────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 2px 8px; border-radius: 4px;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.badge-ce { background: rgba(0,229,255,0.12); color: var(--accent); }
+.badge-pe { background: rgba(255,61,87,0.12); color: var(--red); }
+.badge-win { background: rgba(0,200,83,0.12); color: var(--green); }
+.badge-loss { background: rgba(255,61,87,0.12); color: var(--red); }
+.badge-open { background: rgba(255,215,64,0.12); color: var(--gold); }
+.badge-pending { background: rgba(0,229,255,0.08); color: var(--accent); }
+.badge-active { background: rgba(0,200,83,0.12); color: var(--green); }
+.badge-expired { background: rgba(74,96,128,0.3); color: var(--muted); }
+.badge-high { background: rgba(255,100,0,0.18); color: #ff8c42; }
+.badge-medium { background: rgba(0,200,83,0.12); color: var(--green); }
+.badge-exit-better { background: rgba(0,200,83,0.12); color: var(--green); }
+.badge-held-better { background: rgba(255,61,87,0.12); color: var(--red); }
+
+/* ── FILTER BAR ─────────────────────────────────────────────── */
+.filter-bar {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.filter-input, .filter-select {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-ui); font-size: 12px;
+  padding: 6px 10px; border-radius: 6px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.filter-input:focus, .filter-select:focus { border-color: var(--accent); }
+.filter-input::placeholder { color: var(--text-dim); }
+
+/* ── MINI BAR CHART ─────────────────────────────────────────── */
+.mini-bar-wrap { display: flex; align-items: center; gap: 6px; }
+.mini-bar {
+  height: 8px; border-radius: 2px; min-width: 2px;
+  display: inline-block;
+}
+
+/* ── ANALYTICS GRID ─────────────────────────────────────────── */
+.analytics-grid { display: flex; flex-direction: column; gap: 20px; }
+.analytics-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 18px 20px;
+}
+.analytics-card.full-width { width: 100%; }
+.card-title {
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--text-dim); margin-bottom: 14px;
+}
+
+/* ── POST-EXIT SUMMARY ──────────────────────────────────────── */
+.postex-summary {
+  display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px;
+}
+.postex-pill {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 12px 18px;
+  font-family: var(--font-mono);
+}
+.postex-pill .pill-label { font-size: 10px; color: var(--text-dim); margin-bottom: 4px; }
+.postex-pill .pill-val { font-size: 16px; font-weight: 700; }
+
+/* ── EMPTY STATE ────────────────────────────────────────────── */
+.empty-state {
+  text-align: center; padding: 40px;
+  color: var(--text-dim); font-size: 13px;
+  background: var(--bg2); border-radius: 8px;
+  border: 1px dashed var(--border);
+}
+
+/* ── TABLE FOOTER ───────────────────────────────────────────── */
+.table-footer {
+  padding: 10px 12px;
+  font-size: 11px; color: var(--text-dim);
+  font-family: var(--font-mono);
+}
+
+/* ── CHART CANVAS ───────────────────────────────────────────── */
+#pnl-chart { max-height: 260px; }
+
+/* ── SCORE PILL ─────────────────────────────────────────────── */
+.score-bar {
+  display: inline-flex; align-items: center;
+  gap: 6px;
+}
+.score-num { font-weight: 700; }
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .tabs { gap: 0; overflow-x: auto; }
+  .tab { padding: 6px 10px; font-size: 11px; }
+  .topbar { height: auto; flex-wrap: wrap; padding: 8px 12px; gap: 8px; }
+  .page { padding: 12px; }
+  .page-hero { gap: 10px; }
+  .hero-value { font-size: 18px; }
+  .data-table { font-size: 11px; }
+}

@@ -1,0 +1,114 @@
+[
+  {
+    "date": "2026-06-25",
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "net_pnl": 0.0
+  },
+  {
+    "date": "2026-06-24",
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "net_pnl": 0.0
+  },
+  {
+    "date": "2026-06-23",
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "net_pnl": 0.0
+  },
+  {
+    "date": "2026-06-22",
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "net_pnl": 0.0
+  },
+  {
+    "date": "2026-06-19",
+    "trades": 1,
+    "wins": 0,
+    "losses": 1,
+    "net_pnl": -2933.91
+  },
+  {
+    "date": "2026-06-18",
+    "trades": 3,
+    "wins": 3,
+    "losses": 0,
+    "net_pnl": 23730.4
+  },
+  {
+    "date": "2026-06-17",
+    "trades": 2,
+    "wins": 2,
+    "losses": 0,
+    "net_pnl": 1987.98
+  },
+  {
+    "date": "2026-06-16",
+    "trades": 3,
+    "wins": 0,
+    "losses": 3,
+    "net_pnl": -8123.27
+  },
+  {
+    "date": "2026-06-15",
+    "trades": 4,
+    "wins": 2,
+    "losses": 2,
+    "net_pnl": -928.9
+  },
+  {
+    "date": "2026-06-12",
+    "trades": 3,
+    "wins": 2,
+    "losses": 1,
+    "net_pnl": 3257.7
+  },
+  {
+    "date": "2026-06-11",
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "net_pnl": 0.0
+  },
+  {
+    "date": "2026-06-10",
+    "trades": 3,
+    "wins": 0,
+    "losses": 3,
+    "net_pnl": -4161.34
+  },
+  {
+    "date": "2026-06-08",
+    "trades": 1,
+    "wins": 0,
+    "losses": 1,
+    "net_pnl": -433.73
+  },
+  {
+    "date": "2026-06-05",
+    "trades": 1,
+    "wins": 0,
+    "losses": 1,
+    "net_pnl": -1693.87
+  },
+  {
+    "date": "2026-06-04",
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "net_pnl": 0.0
+  },
+  {
+    "date": "2026-06-03",
+    "trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "net_pnl": 0.0
+  }
+]
