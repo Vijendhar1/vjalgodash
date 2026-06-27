@@ -1,1 +1,18 @@
-{"last_updated":null,"market_open":false,"session":null,"open_trade":null,"trades":[],"candles":[],"ticks":[]}
+{
+  "trades": [],
+  "open_trade": null,
+  "candles": [],
+  "ticks": [],
+  "session": {
+    "date": "2026-06-27",
+    "total_trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "win_rate": null,
+    "total_pnl": 0,
+    "total_points": 0,
+    "open_count": 0
+  },
+  "last_updated": "2026-06-27 13:33:40",
+  "market_open": false
+}
