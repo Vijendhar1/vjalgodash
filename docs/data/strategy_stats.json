@@ -2,8 +2,8 @@
   {
     "strategy": "ORB",
     "direction": "CE",
-    "trades": 6,
-    "wins": 5,
-    "total_pnl": 22784.0
+    "trades": 9,
+    "wins": 7,
+    "total_pnl": 30256.0
   }
 ]

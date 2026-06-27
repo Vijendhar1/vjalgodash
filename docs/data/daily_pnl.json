@@ -1,24 +1,10 @@
 [
   {
-    "date": "2026-06-25",
-    "trades": 0,
-    "wins": 0,
-    "losses": 0,
-    "net_pnl": 0.0
-  },
-  {
-    "date": "2026-06-24",
-    "trades": 0,
-    "wins": 0,
-    "losses": 0,
-    "net_pnl": 0.0
-  },
-  {
     "date": "2026-06-23",
-    "trades": 0,
-    "wins": 0,
-    "losses": 0,
-    "net_pnl": 0.0
+    "trades": 3,
+    "wins": 2,
+    "losses": 1,
+    "net_pnl": 7471.25
   },
   {
     "date": "2026-06-22",
