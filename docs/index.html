@@ -22,6 +22,7 @@
     <button class="tab" data-page="watchlist">👁 Watchlist</button>
     <button class="tab" data-page="analytics">📊 Analytics</button>
     <button class="tab" data-page="postex">🔍 Post-Exit</button>
+    <button class="tab vss-tab" data-page="vss">⚡ VSS Live</button>
   </nav>
   <div class="topbar-right">
     <span class="live-dot"></span>
@@ -171,6 +172,113 @@
       <th>Actual P&amp;L</th><th>PnL if Held</th><th>Delta</th><th>Verdict</th>
     </tr></thead>
     <tbody id="postex-body"></tbody>
+  </table>
+</div>
+
+<!-- VSS LIVE PAGE -->
+<div id="page-vss" class="page">
+  <div class="vss-header">
+    <div class="vss-title">⚡ VSS — NIFTY Scalper <span class="vss-version">v1.7.0</span></div>
+    <div class="vss-status" id="vss-status">
+      <span class="vss-dot" id="vss-dot"></span>
+      <span id="vss-status-text">Loading…</span>
+    </div>
+    <div class="vss-refresh" id="vss-last-tick">—</div>
+  </div>
+
+  <!-- Session Stats -->
+  <div class="vss-hero">
+    <div class="vss-kpi" id="vss-pnl-card">
+      <div class="vss-kpi-label">Today's P&amp;L</div>
+      <div class="vss-kpi-val" id="vss-pnl">—</div>
+    </div>
+    <div class="vss-kpi">
+      <div class="vss-kpi-label">Trades</div>
+      <div class="vss-kpi-val" id="vss-trades">—</div>
+    </div>
+    <div class="vss-kpi">
+      <div class="vss-kpi-label">Wins</div>
+      <div class="vss-kpi-val pos" id="vss-wins">—</div>
+    </div>
+    <div class="vss-kpi">
+      <div class="vss-kpi-label">Losses</div>
+      <div class="vss-kpi-val neg" id="vss-losses">—</div>
+    </div>
+    <div class="vss-kpi">
+      <div class="vss-kpi-label">Win Rate</div>
+      <div class="vss-kpi-val" id="vss-wr">—</div>
+    </div>
+  </div>
+
+  <!-- Open Position -->
+  <div class="section-title">Open Position <span class="vss-live-badge">LIVE</span></div>
+  <div id="vss-open-wrap">
+    <div class="vss-position-card" id="vss-position-card" style="display:none">
+      <div class="vss-pos-top">
+        <div class="vss-pos-symbol" id="vss-pos-symbol">—</div>
+        <div class="vss-pos-dir" id="vss-pos-dir">—</div>
+        <div class="vss-pos-mode" id="vss-pos-mode">—</div>
+      </div>
+      <div class="vss-pos-stats">
+        <div class="vss-pos-stat">
+          <div class="vss-pos-label">Entry</div>
+          <div class="vss-pos-val" id="vss-pos-entry">—</div>
+        </div>
+        <div class="vss-pos-stat">
+          <div class="vss-pos-label">LTP</div>
+          <div class="vss-pos-val accent-text" id="vss-pos-ltp">—</div>
+        </div>
+        <div class="vss-pos-stat">
+          <div class="vss-pos-label">SL</div>
+          <div class="vss-pos-val neg" id="vss-pos-sl">—</div>
+        </div>
+        <div class="vss-pos-stat">
+          <div class="vss-pos-label">Peak</div>
+          <div class="vss-pos-val pos" id="vss-pos-peak">—</div>
+        </div>
+        <div class="vss-pos-stat">
+          <div class="vss-pos-label">P&amp;L</div>
+          <div class="vss-pos-val" id="vss-pos-pnl">—</div>
+        </div>
+        <div class="vss-pos-stat">
+          <div class="vss-pos-label">Points</div>
+          <div class="vss-pos-val" id="vss-pos-pts">—</div>
+        </div>
+      </div>
+      <!-- TSL Progress Bar -->
+      <div class="vss-tsl-wrap">
+        <div class="vss-tsl-label">TSL Zone</div>
+        <div class="vss-tsl-bar-bg">
+          <div class="vss-tsl-bar" id="vss-tsl-bar"></div>
+          <div class="vss-tsl-marker" id="vss-tsl-z2" style="left:26.7%">Z2</div>
+          <div class="vss-tsl-marker" id="vss-tsl-z3" style="left:50%">Z3</div>
+          <div class="vss-tsl-marker" id="vss-tsl-tgt" style="left:66.7%">TGT</div>
+        </div>
+        <div class="vss-tsl-zone-label" id="vss-tsl-zone">Zone 1 — Wide SL</div>
+      </div>
+    </div>
+    <div class="empty-state" id="vss-no-position">No open position. Bot is monitoring for signals.</div>
+  </div>
+
+  <!-- Today's Trades -->
+  <div class="section-title">Today's Trades</div>
+  <table class="data-table" id="vss-trades-table">
+    <thead><tr>
+      <th>Time</th><th>Symbol</th><th>Dir</th><th>Mode</th>
+      <th>Entry ₹</th><th>Exit ₹</th><th>P&amp;L ₹</th><th>Pts</th>
+      <th>Vol</th><th>Exit Reason</th><th>Result</th>
+    </tr></thead>
+    <tbody id="vss-trades-body"></tbody>
+  </table>
+
+  <!-- Latest Candles -->
+  <div class="section-title">Latest Candles <span class="subtitle">— last 20 sealed candles</span></div>
+  <table class="data-table" id="vss-candles-table">
+    <thead><tr>
+      <th>Time</th><th>Symbol</th><th>O</th><th>H</th><th>L</th><th>C</th>
+      <th>Vol Ratio</th><th>Body%</th><th>Delta%</th>
+    </tr></thead>
+    <tbody id="vss-candles-body"></tbody>
   </table>
 </div>
 

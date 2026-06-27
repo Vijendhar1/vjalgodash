@@ -42,6 +42,7 @@ function renderPage(page) {
   else if (page === 'watchlist') renderWatchlist();
   else if (page === 'analytics') renderAnalytics();
   else if (page === 'postex') renderPostExit();
+  else if (page === 'vss') renderVSS();
 }
 
 // ── HELPERS ──────────────────────────────────────────────────
@@ -376,3 +377,175 @@ function renderPostExit() {
 // ── INIT + AUTO REFRESH ───────────────────────────────────────
 loadAll();
 setInterval(loadAll, 5 * 60 * 1000); // refresh every 5 min
+
+// ── VSS LIVE ──────────────────────────────────────────────────
+let vssRefreshTimer = null;
+const VSS_POLL_MS = 3000; // poll every 3 seconds when tab is active
+const SL_PTS = 8.0;
+const ZONE2  = 8.0;
+const ZONE3  = 15.0;
+const TARGET = 20.0;
+
+function renderVSS() {
+  if (vssRefreshTimer) clearInterval(vssRefreshTimer);
+  loadVSS();
+  vssRefreshTimer = setInterval(loadVSS, VSS_POLL_MS);
+}
+
+async function loadVSS() {
+  try {
+    const res = await fetch(DATA_BASE + 'vss_live.json?v=' + Date.now());
+    const d = await res.json();
+    renderVSSData(d);
+  } catch (e) {
+    setVSSStatus('offline', 'Bridge offline');
+  }
+}
+
+function renderVSSData(d) {
+  if (!d || !d.last_updated) {
+    setVSSStatus('offline', 'No data from bridge');
+    return;
+  }
+
+  // Staleness check
+  const updatedAt = new Date(d.last_updated);
+  const ageS = (Date.now() - updatedAt) / 1000;
+  document.getElementById('vss-last-tick').textContent = 'Updated: ' + d.last_updated;
+
+  if (ageS > 15) {
+    setVSSStatus('stale', `Stale — ${Math.round(ageS)}s ago`);
+  } else if (d.market_open) {
+    setVSSStatus('live', 'LIVE — market open');
+  } else {
+    setVSSStatus('stale', 'Market closed');
+  }
+
+  // Session stats
+  const sess = d.session || {};
+  const pnl = sess.total_pnl || 0;
+  document.getElementById('vss-pnl').innerHTML =
+    `<span class="${pnlClass(pnl)}">${pnlFmt(pnl)}</span>`;
+  document.getElementById('vss-pnl-card').style.borderLeft =
+    `3px solid ${pnl >= 0 ? 'var(--green)' : 'var(--red)'}`;
+  document.getElementById('vss-trades').textContent = sess.total_trades ?? '0';
+  document.getElementById('vss-wins').textContent   = sess.wins ?? '0';
+  document.getElementById('vss-losses').textContent = sess.losses ?? '0';
+  document.getElementById('vss-wr').textContent     =
+    sess.win_rate != null ? sess.win_rate + '%' : '—';
+
+  // Open position
+  const op = d.open_trade;
+  const card  = document.getElementById('vss-position-card');
+  const noPos = document.getElementById('vss-no-position');
+
+  if (op) {
+    card.style.display  = '';
+    noPos.style.display = 'none';
+
+    const entry = parseFloat(op.entry_price || 0);
+    const ltp   = parseFloat(op.current_ltp || entry);
+    const sl    = parseFloat(op.current_sl  || (entry - SL_PTS));
+    const peak  = parseFloat(op.peak_price  || entry);
+    const pts   = ltp - entry;
+    const pnlV  = pts * 65; // lot size
+
+    document.getElementById('vss-pos-symbol').textContent = op.symbol || '—';
+    document.getElementById('vss-pos-dir').innerHTML      = dirBadge(op.direction);
+    const modeEl = document.getElementById('vss-pos-mode');
+    modeEl.textContent = op.paper ? 'PAPER' : 'REAL';
+    modeEl.className   = 'vss-pos-mode ' + (op.paper ? 'paper' : 'real');
+
+    document.getElementById('vss-pos-entry').textContent = entry.toFixed(1);
+    document.getElementById('vss-pos-ltp').textContent   = ltp.toFixed(1);
+    document.getElementById('vss-pos-sl').textContent    = sl.toFixed(1);
+    document.getElementById('vss-pos-peak').textContent  = peak.toFixed(1);
+    document.getElementById('vss-pos-pnl').innerHTML =
+      `<span class="${pnlClass(pnlV)}">${pnlFmt(pnlV)}</span>`;
+    document.getElementById('vss-pos-pts').innerHTML =
+      `<span class="${pnlClass(pts)}">${pts >= 0 ? '+' : ''}${pts.toFixed(1)}pt</span>`;
+
+    // TSL bar — progress from 0 to TARGET+SL_PTS total range
+    const totalRange = SL_PTS + TARGET; // 8 + 20 = 28
+    const progress   = Math.max(0, Math.min(100, ((pts + SL_PTS) / totalRange) * 100));
+    document.getElementById('vss-tsl-bar').style.width = progress + '%';
+
+    // Zone label
+    let zoneLabel = 'Zone 1 — Wide SL (8pt)';
+    if (pts >= ZONE3)  zoneLabel = '🟢 Zone 3 — Tight Trail (2pt)';
+    else if (pts >= ZONE2) zoneLabel = '🟡 Zone 2 — Active Trail (4pt)';
+    document.getElementById('vss-tsl-zone').textContent = zoneLabel;
+
+    // TSL marker positions (as % of totalRange)
+    document.getElementById('vss-tsl-z2').style.left  = ((SL_PTS + ZONE2)  / totalRange * 100) + '%';
+    document.getElementById('vss-tsl-z3').style.left  = ((SL_PTS + ZONE3)  / totalRange * 100) + '%';
+    document.getElementById('vss-tsl-tgt').style.left = ((SL_PTS + TARGET) / totalRange * 100) + '%';
+
+  } else {
+    card.style.display  = 'none';
+    noPos.style.display = '';
+  }
+
+  // Trades table
+  const trades = (d.trades || []).filter(t => t.status === 'CLOSED');
+  document.getElementById('vss-trades-body').innerHTML = trades.map(t => {
+    const entry  = parseFloat(t.entry_price || 0);
+    const exitP  = parseFloat(t.exit_price  || 0);
+    const tPnl   = parseFloat(t.pnl || 0);
+    const pts    = exitP - entry;
+    const isWin  = tPnl > 0;
+    const entryT = (t.entry_time || '').split(' ')[1]?.slice(0,5) || '—';
+    return `<tr>
+      <td class="neutral">${esc(entryT)}</td>
+      <td class="accent-text">${esc(t.symbol)}</td>
+      <td>${dirBadge(t.direction)}</td>
+      <td><span class="badge ${t.paper ? 'badge-pending' : 'badge-active'}">${t.paper ? 'PAPER' : 'REAL'}</span></td>
+      <td>${entry.toFixed(1)}</td>
+      <td>${exitP.toFixed(1)}</td>
+      <td class="${pnlClass(tPnl)}">${pnlFmt(tPnl)}</td>
+      <td class="${pnlClass(pts)}">${pts >= 0 ? '+' : ''}${pts.toFixed(1)}</td>
+      <td class="neutral">${Number(t.vol_ratio || 0).toFixed(1)}x</td>
+      <td class="neutral" style="font-size:10px">${esc(t.exit_reason || '—')}</td>
+      <td>${isWin ? '<span class="badge badge-win">WIN</span>' : '<span class="badge badge-loss">LOSS</span>'}</td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="11" class="neutral" style="text-align:center;padding:20px">No trades today</td></tr>';
+
+  // Candles table (last 20)
+  const candles = (d.candles || []).slice(0, 20);
+  document.getElementById('vss-candles-body').innerHTML = candles.map(c => {
+    const isBull = parseFloat(c.close_p || 0) >= parseFloat(c.open_p || 0);
+    const cls    = isBull ? 'candle-bull' : 'candle-bear';
+    const dir    = isBull ? '▲' : '▼';
+    const vr     = parseFloat(c.vol_ratio || 0);
+    const vrCls  = vr >= 1.5 ? 'pos' : vr >= 1.0 ? 'gold' : 'neutral';
+    const cTime  = (c.candle_time || '').split(' ')[1]?.slice(0,5) || '—';
+    return `<tr>
+      <td class="neutral">${cTime}</td>
+      <td class="${cls}">${dir} ${esc(c.symbol)}</td>
+      <td>${Number(c.open_p || 0).toFixed(1)}</td>
+      <td>${Number(c.high_p || 0).toFixed(1)}</td>
+      <td>${Number(c.low_p  || 0).toFixed(1)}</td>
+      <td class="${cls}">${Number(c.close_p || 0).toFixed(1)}</td>
+      <td class="${vrCls}">${vr.toFixed(2)}x</td>
+      <td>${(parseFloat(c.body_ratio  || 0)*100).toFixed(0)}%</td>
+      <td>${(parseFloat(c.delta_ratio || 0)*100).toFixed(0)}%</td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="9" class="neutral" style="text-align:center;padding:20px">No candles yet</td></tr>';
+}
+
+function setVSSStatus(state, text) {
+  const dot  = document.getElementById('vss-dot');
+  const txt  = document.getElementById('vss-status-text');
+  dot.className = 'vss-dot ' + state;
+  txt.textContent = text;
+}
+
+// Stop VSS polling when switching away from the tab
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    if (tab.dataset.page !== 'vss' && vssRefreshTimer) {
+      clearInterval(vssRefreshTimer);
+      vssRefreshTimer = null;
+    }
+  });
+});
