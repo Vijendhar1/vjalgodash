@@ -4,7 +4,7 @@
   "candles": [],
   "ticks": [],
   "session": {
-    "date": "2026-06-27",
+    "date": "2026-06-29",
     "total_trades": 0,
     "wins": 0,
     "losses": 0,
@@ -13,6 +13,6 @@
     "total_points": 0,
     "open_count": 0
   },
-  "last_updated": "2026-06-27 13:36:45",
-  "market_open": false
+  "last_updated": "2026-06-29 09:23:13",
+  "market_open": true
 }
